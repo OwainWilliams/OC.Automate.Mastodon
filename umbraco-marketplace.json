@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+    "AuthorDetails": {
+        "Name": "Owain Williams",
+        "ImageUrl": "https://github.com/OwainWilliams.png"
+    },
+    "Category": "Integrations",
+    "Description": "Mastodon connection type and action for Umbraco Automate. Post statuses to any Mastodon instance as part of an automation workflow.",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/OwainWilliams/OC.Automate.Mastodon/issues",
+    "PackageType": "Package",
+    "Tags": [ "automate", "mastodon", "fediverse", "social media" ],
+    "Title": "OC.Automate.Mastodon"
+}
