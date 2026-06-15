@@ -17,7 +17,7 @@ jobs:
         uses: Nuget/login@v1
         id: login
         with: 
-          username: scottishcoder
+          user: scottishcoder
 
       
       - name: Setup .NET
