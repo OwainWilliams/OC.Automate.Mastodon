@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Automate.Core.Actions;
 using Umbraco.Automate.Core.Connections;
 using Umbraco.Cms.Core.Composing;
@@ -9,6 +10,9 @@ public class MastodonComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
+        builder.Services.AddOptions<MastodonSettings>()
+            .BindConfiguration(MastodonSettings.SectionName);
+
         builder.WithCollectionBuilder<ConnectionTypeCollectionBuilder>()
             .Add<MastodonConnectionType>();
 
