@@ -13,8 +13,13 @@ jobs:
       id-token: write
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - name: Nuget Login
+        uses: Nuget/login@v1
+        id: login
+        with: 
+          username: scottishcoder
 
+      
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -23,5 +28,6 @@ jobs:
       - name: Pack
         run: dotnet pack src/OC.Automate.Mastodon/OC.Automate.Mastodon.csproj -c Release /p:Version=${{ github.ref_name }}
 
-      - name: Push to NuGet
-        run: dotnet nuget push **/*.nupkg -s https://api.nuget.org/v3/index.json --skip-duplicate
+        # Push the package
+      - name: NuGet push
+        run: dotnet nuget push artifacts/my-sdk.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
