@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Automate.Core" Version="17.0.0-beta" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[17.4.0, 18.0.0)" />
   </ItemGroup>
 
 </Project>
