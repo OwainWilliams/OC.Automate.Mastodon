@@ -10,7 +10,7 @@
   "LicenseTypes": [ "Free" ],
   "IssueTrackerUrl": "https://github.com/OwainWilliams/OC.Automate.Mastodon/issues",
   "PackageType": "Package",
-  "Tags": [ "automate", "mastodon", "fediverse", "social media" ],
+  "Tags": [ "automate", "mastodon", "fediverse", "social media", "umbraco-marketplace" ],
   "Title": "OC.Automate.Mastodon",
   "RelatedPackages": [
     {
