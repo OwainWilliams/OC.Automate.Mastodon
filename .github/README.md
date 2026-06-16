@@ -2,7 +2,7 @@
 
 [![Downloads](https://img.shields.io/nuget/dt/OC.Automate.Mastodon?color=cc9900)](https://www.nuget.org/packages/OC.Automate.Mastodon/)
 [![NuGet](https://img.shields.io/nuget/vpre/OC.Automate.Mastodon?color=0273B3)](https://www.nuget.org/packages/OC.Automate.Mastodon)
-[![GitHub license](https://img.shields.io/github/license/OwainWilliams/OC.Automate?color=8AB803)](https://github.com/OwainWilliams/OC.Automate/blob/main/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/OwainWilliams/OC.Automate.Mastodon?color=8AB803)](https://github.com/OwainWilliams/OC.Automate.Mastodon/blob/main/LICENSE)
 
 A Mastodon connection type and action for [Umbraco Automate](https://github.com/umbraco/Umbraco.Automate). Post statuses to any Mastodon instance as part of an automation workflow.
 
