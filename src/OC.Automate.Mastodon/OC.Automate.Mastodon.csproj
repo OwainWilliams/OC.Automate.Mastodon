@@ -7,7 +7,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>OC.Automate.Mastodon</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Authors>Owain Williams</Authors>
     <Description>Mastodon connection type and action for Umbraco Automate. Lets you post statuses to any Mastodon instance as part of an automation workflow.</Description>
     <PackageTags>umbraco;automate;mastodon;fediverse;umbraco-marketplace</PackageTags>
@@ -30,9 +30,12 @@
     <None Include="..\..\ocAutomateMastodon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Umbraco.Automate.Core" Version="17.0.0-beta" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[17.4.0, 18.0.0)" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Automate.Core" Version="[17.0.0-beta, 19.0.0)" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[17.4.0, 19.0.0)" />
+	</ItemGroup>
+	<PropertyGroup>
+		<!-- Only redirect when NOT running in CI -->
+		<PackageOutputPath Condition="'$(GITHUB_ACTIONS)' != 'true'">C:\dev\localNuget</PackageOutputPath>
+	</PropertyGroup>
 </Project>
