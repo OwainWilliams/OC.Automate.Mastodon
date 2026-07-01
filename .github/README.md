@@ -65,7 +65,7 @@ Add the **Send Mastodon Post** action to any automation and select your Mastodon
 
 | Package version | Umbraco Automate | Umbraco CMS |
 |---|---|---|
-| 1.x | 17.x | 17.x |
+| 1.x | 17.x – 18.x | 17.x – 18.x |
 
 ## Links
 
