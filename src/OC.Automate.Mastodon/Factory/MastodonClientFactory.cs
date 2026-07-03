@@ -1,7 +1,8 @@
 using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
+using OC.Automate.Mastodon.Settings;
 
-namespace OC.Automate.Mastodon;
+namespace OC.Automate.Mastodon.Factory;
 
 /// <summary>
 /// Resolves Mastodon access tokens and builds authenticated <see cref="HttpClient"/> instances.

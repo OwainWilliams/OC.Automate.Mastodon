@@ -1,8 +1,9 @@
 using Microsoft.Extensions.Logging;
+using OC.Automate.Mastodon.Factory;
 using System.Net.Http.Json;
 using Umbraco.Automate.Core.Actions;
 
-namespace OC.Automate.Mastodon;
+namespace OC.Automate.Mastodon.Settings;
 
 [Action("mastodonSendPost", "Send Mastodon Post", ConnectionTypeAlias = "mastodon")]
 public class SendMastodonPostAction : ActionBase<MastodonPostSettings>

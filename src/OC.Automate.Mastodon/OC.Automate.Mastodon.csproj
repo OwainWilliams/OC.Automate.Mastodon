@@ -7,7 +7,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>OC.Automate.Mastodon</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Owain Williams</Authors>
     <Description>Mastodon connection type and action for Umbraco Automate. Lets you post statuses to any Mastodon instance as part of an automation workflow.</Description>
     <PackageTags>umbraco;automate;mastodon;fediverse;umbraco-marketplace</PackageTags>

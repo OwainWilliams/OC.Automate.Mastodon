@@ -1,13 +1,14 @@
+using OC.Automate.Mastodon.Factory;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using Umbraco.Automate.Core.Connections;
 using Umbraco.Automate.Core.Settings;
 
-namespace OC.Automate.Mastodon;
+namespace OC.Automate.Mastodon.Settings;
 
 public class MastodonConnectionSettings
 {
-    [Field(Label = "Instance URL", Description = "The base URL of your Mastodon instance (e.g. https://mastodon.social).")]
+    [Field(Label = "Instance URL", Description = "The base URL of your Mastodon instance (e.g. https://umbracocommunity.social).")]
     public string InstanceUrl { get; set; } = string.Empty;
 
     [Field(Label = "Connection Name", Description = "The key used to look up the access token in appsettings (OwainCodes:Automate:Mastodon:AccessTokens).", SortOrder = 1)]

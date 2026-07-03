@@ -1,6 +1,6 @@
 using Umbraco.Automate.Core.Settings;
 
-namespace OC.Automate.Mastodon;
+namespace OC.Automate.Mastodon.Settings;
 
 public class MastodonPostSettings
 {
