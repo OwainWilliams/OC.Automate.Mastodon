@@ -24,6 +24,10 @@ In your Mastodon account go to **Preferences → Development → New application
 
 Access tokens are stored in configuration, not the backoffice. Add the following to your `appsettings.json` (or `appsettings.Production.json`):
 
+### 2. Add the token to appsettings
+
+Access tokens are stored in configuration, not the backoffice. Add the following to your `appsettings.json` (or `appsettings.Production.json`):
+
 ```json
 {
   "OC.Automate.Mastodon": {
@@ -32,6 +36,21 @@ Access tokens are stored in configuration, not the backoffice. Add the following
     }
   }
 }
+```
+## Release 1.1.0+
+To bring the config inline with Umbraco, the config now lives within Umbraco:Automate:Providers. 
+
+```json
+"Umbraco": {
+    "Automate": {
+      "Providers": {
+        "OCAutomateMastodon": {
+            "AccessTokens": {
+              "myaccount": "your-access-token-here"
+          }
+        }
+      },
+
 ```
 
 The key (`myaccount` above) is a name you choose — you will reference it when creating the connection in the backoffice. You can add multiple entries if you need to post from more than one account.
