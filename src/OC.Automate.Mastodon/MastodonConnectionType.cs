@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 using Umbraco.Automate.Core.Connections;
 using Umbraco.Automate.Core.Settings;
 
@@ -17,17 +17,14 @@ public class MastodonConnectionSettings
 [ConnectionType("mastodon", "Mastodon")]
 public class MastodonConnectionType : ConnectionTypeBase<MastodonConnectionSettings>
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IOptionsMonitor<MastodonSettings> _mastodonSettings;
+    private readonly MastodonClientFactory _clientFactory;
 
     public MastodonConnectionType(
         ConnectionTypeInfrastructure infrastructure,
-        IHttpClientFactory httpClientFactory,
-        IOptionsMonitor<MastodonSettings> mastodonSettings)
+        MastodonClientFactory clientFactory)
         : base(infrastructure)
     {
-        _httpClientFactory = httpClientFactory;
-        _mastodonSettings = mastodonSettings;
+        _clientFactory = clientFactory;
     }
 
     public override async Task<ConnectionValidationResult> ValidateAsync(object? settings, CancellationToken cancellationToken)
@@ -40,19 +37,11 @@ public class MastodonConnectionType : ConnectionTypeBase<MastodonConnectionSetti
         if (string.IsNullOrWhiteSpace(mastodonSettings.ConnectionName))
             return ConnectionValidationResult.Failure("Connection name is required.");
 
-        if (!_mastodonSettings.CurrentValue.AccessTokens.TryGetValue(mastodonSettings.ConnectionName, out var accessToken)
-            || string.IsNullOrWhiteSpace(accessToken))
-        {
-            return ConnectionValidationResult.Failure(
-                $"No access token found for connection name '{mastodonSettings.ConnectionName}' in appsettings (OwainCodes:Automate:Mastodon:AccessTokens).");
-        }
+        if (!_clientFactory.TryCreateClient(mastodonSettings.ConnectionName, out var client, out var tokenError))
+            return ConnectionValidationResult.Failure(tokenError);
 
         try
         {
-            var client = _httpClientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-
             var response = await client.GetAsync(
                 $"{mastodonSettings.InstanceUrl.TrimEnd('/')}/api/v1/accounts/verify_credentials",
                 cancellationToken);
@@ -79,7 +68,10 @@ public class MastodonConnectionType : ConnectionTypeBase<MastodonConnectionSetti
 
     private sealed class MastodonAccountResponse
     {
+        [JsonPropertyName("username")]
         public string? Username { get; set; }
+
+        [JsonPropertyName("acct")]
         public string? Account { get; set; }
     }
 }

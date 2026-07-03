@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 using Umbraco.Automate.Core.Actions;
 
@@ -8,20 +7,17 @@ namespace OC.Automate.Mastodon;
 [Action("mastodonSendPost", "Send Mastodon Post", ConnectionTypeAlias = "mastodon")]
 public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly MastodonClientFactory _clientFactory;
     private readonly ILogger<SendMastodonPostAction> _logger;
-    private readonly IOptionsMonitor<MastodonSettings> _mastodonSettings;
 
     public SendMastodonPostAction(
         ActionInfrastructure infrastructure,
-        IHttpClientFactory httpClientFactory,
-        ILogger<SendMastodonPostAction> logger,
-        IOptionsMonitor<MastodonSettings> mastodonSettings)
+        MastodonClientFactory clientFactory,
+        ILogger<SendMastodonPostAction> logger)
         : base(infrastructure)
     {
-        _httpClientFactory = httpClientFactory;
+        _clientFactory = clientFactory;
         _logger = logger;
-        _mastodonSettings = mastodonSettings;
     }
 
     public override async Task<ActionResult> ExecuteAsync(ActionContext context, CancellationToken cancellationToken)
@@ -37,11 +33,10 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
                 StepRunErrorCategory.ConfigurationError);
         }
 
-        if (!_mastodonSettings.CurrentValue.AccessTokens.TryGetValue(connectionSettings.ConnectionName, out var accessToken)
-            || string.IsNullOrWhiteSpace(accessToken))
+        if (!_clientFactory.TryCreateClient(connectionSettings.ConnectionName, out var client, out var tokenError))
         {
             return ActionResult.Failed(
-                new InvalidOperationException($"No access token found for connection name '{connectionSettings.ConnectionName}' in appsettings (OwainCodes:Automate:Mastodon:AccessTokens)."),
+                new InvalidOperationException(tokenError),
                 StepRunErrorCategory.ConfigurationError);
         }
 
@@ -63,10 +58,6 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
             sensitive = settings.IsSensitive,
             spoiler_text = settings.SpoilerText
         };
-
-        var client = _httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
         _logger.LogInformation(
             "Posting to Mastodon instance {InstanceUrl}: {StatusLength} characters",

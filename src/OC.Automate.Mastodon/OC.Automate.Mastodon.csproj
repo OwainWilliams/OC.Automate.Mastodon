@@ -34,8 +34,8 @@
 		<PackageReference Include="Umbraco.Automate.Core" Version="[17.0.0-beta, 19.0.0)" />
 		<PackageReference Include="Umbraco.Cms.Core" Version="[17.4.0, 19.0.0)" />
 	</ItemGroup>
-	<PropertyGroup>
-		<!-- Only redirect when NOT running in CI -->
-		<PackageOutputPath Condition="'$(GITHUB_ACTIONS)' != 'true'">C:\dev\localNuget</PackageOutputPath>
-	</PropertyGroup>
+	<!--
+	  Local package output (e.g. a local NuGet feed) is machine-specific, so it lives in the
+	  git-ignored OC.Automate.Mastodon.csproj.user file rather than being committed here.
+	-->
 </Project>

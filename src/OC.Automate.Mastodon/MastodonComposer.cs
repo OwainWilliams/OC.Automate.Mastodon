@@ -13,6 +13,8 @@ public class MastodonComposer : IComposer
         builder.Services.AddOptions<MastodonSettings>()
             .BindConfiguration(MastodonSettings.SectionName);
 
+        builder.Services.AddSingleton<MastodonClientFactory>();
+
         builder.WithCollectionBuilder<ConnectionTypeCollectionBuilder>()
             .Add<MastodonConnectionType>();
 
