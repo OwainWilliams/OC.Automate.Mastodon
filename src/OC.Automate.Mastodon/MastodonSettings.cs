@@ -2,7 +2,7 @@ namespace OC.Automate.Mastodon;
 
 public class MastodonSettings
 {
-    public const string SectionName = "OwainCodes:Automate:Mastodon";
+    public const string SectionName = "Umbraco:Automate:Providers:OCAutomateMastodon";
 
     /// <summary>
     /// Access tokens keyed by the connection name set in the backoffice.
