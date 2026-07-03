@@ -6,10 +6,13 @@ namespace OC.Automate.Mastodon;
 /// <summary>
 /// Resolves Mastodon access tokens and builds authenticated <see cref="HttpClient"/> instances.
 /// Shared by the connection validator and the send-post action so token lookup, the bearer
-/// header and the "no token" message live in one place.
+/// header, the request timeout and the "no token" message live in one place.
 /// </summary>
 public sealed class MastodonClientFactory
 {
+    /// <summary>Request timeout applied to every call made to a Mastodon instance.</summary>
+    public static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(15);
+
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOptionsMonitor<MastodonSettings> _settings;
 
@@ -42,6 +45,7 @@ public sealed class MastodonClientFactory
         }
 
         client = _httpClientFactory.CreateClient();
+        client.Timeout = RequestTimeout;
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         return true;
     }

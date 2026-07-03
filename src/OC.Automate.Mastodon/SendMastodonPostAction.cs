@@ -59,14 +59,23 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
             spoiler_text = settings.SpoilerText
         };
 
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"{connectionSettings.InstanceUrl.TrimEnd('/')}/api/v1/statuses")
+        {
+            Content = JsonContent.Create(payload)
+        };
+
+        // Guard against duplicate toots if this step is retried: Mastodon returns the original
+        // status for a repeated Idempotency-Key rather than creating a new one. RunId + StepId is
+        // stable across retries of the same step but unique per step execution.
+        request.Headers.Add("Idempotency-Key", $"{context.RunId}:{context.StepId}");
+
         _logger.LogInformation(
             "Posting to Mastodon instance {InstanceUrl}: {StatusLength} characters",
             connectionSettings.InstanceUrl, status.Length);
 
-        var response = await client.PostAsJsonAsync(
-            $"{connectionSettings.InstanceUrl.TrimEnd('/')}/api/v1/statuses",
-            payload,
-            cancellationToken);
+        var response = await client.SendAsync(request, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
