@@ -20,50 +20,37 @@ No further setup required. The composer registers itself automatically via Umbra
 
 In your Mastodon account go to **Preferences → Development → New application** and create an application with the `write:statuses` scope. Copy the access token.
 
-### 2. Add the token to appsettings
+### 2. Add the token to configuration
 
-Access tokens are stored in configuration, not the backoffice. Add the following to your `appsettings.json` (or `appsettings.Production.json`):
+Access tokens are stored in configuration, not the backoffice. Add the following to your `appsettings.json` (or use environment variables):
 
 ```json
 {
-  "OC.Automate.Mastodon": {
-    "AccessTokens": {
-      "myaccount": "your-access-token-here"
+  "Umbraco": {
+    "Automate": {
+      "Secrets": {
+        "MastodonAccessToken": "your-access-token-here"
+      }
     }
   }
 }
 ```
-## Release 1.1.0+
-To bring the config inline with Umbraco, the config now lives within Umbraco:Automate:Providers. 
 
-```json
-"Umbraco": {
-    "Automate": {
-      "Providers": {
-        "OCAutomateMastodon": {
-            "AccessTokens": {
-              "myaccount": "your-access-token-here"
-          }
-        }
-      },
+For production, use environment variables instead of a config file:
 
 ```
-
-
-The key (`myaccount` above) is a name you choose — you will reference it when creating the connection in the backoffice. You can add multiple entries if you need to post from more than one account.
-
-For production it is recommended to supply tokens via environment variables rather than a config file:
-
+Umbraco__Automate__Secrets__MastodonAccessToken=your-access-token-here
 ```
-OC__Automate__Mastodon__AccessTokens__myaccount=your-access-token-here
-```
+
+To use a different configuration key, update the `AccessToken` default value in the connection settings.
 
 ### 3. Create the connection in the backoffice
 
-1. Go to **Automate → Connections** and create a new **Mastodon** connection.
+1. Go to **Automate → Connections** and create a new **Mastodon** connection (in the **Custom** group).
 2. Enter your instance URL (e.g. `https://mastodon.social`).
-3. Enter the **Connection Name** — this must match the key you used in appsettings (e.g. `myaccount`).
-4. Click **Test connection** to verify.
+3. Click **Test connection** to verify.
+
+Note: The access token is automatically resolved from configuration — no manual entry needed.
 
 ## Usage
 
@@ -77,10 +64,28 @@ Add the **Send Mastodon Post** action to any automation and select your Mastodon
 | Sensitive | Marks the post as sensitive/NSFW. |
 | Spoiler Text | Content warning shown before the post body. |
 
+## Migration from 1.x to 2.x
+
+Version 2.x is a **breaking change**. If you're upgrading from 1.x, you must update your configuration:
+
+### Configuration Structure
+- **Old (1.x)**: `OC:Automate:Mastodon:AccessTokens:connectionName` or `Umbraco:Automate:Providers:OCAutomateMastodon:AccessTokens:connectionName`
+- **New (2.x)**: `Umbraco:Automate:Secrets:MastodonAccessToken`
+
+### Connection Setup
+- **Old (1.x)**: Connections required a "Connection Name" field matching an appsettings key
+- **New (2.x)**: Only the instance URL is needed; the access token is automatically resolved from configuration
+
+### Steps to migrate:
+1. Update your `appsettings.json` or environment variables to use the new configuration path
+2. Recreate your Mastodon connections in the backoffice (select the new **Mastodon** connection type in the **Custom** group)
+3. Enter only the instance URL; the access token is automatically loaded from configuration
+
 ## Compatibility
 
 | Package version | Umbraco Automate | Umbraco CMS |
 |---|---|---|
+| 2.x | 17.x – 18.x | 17.x – 18.x |
 | 1.x | 17.x – 18.x | 17.x – 18.x |
 
 ## Links

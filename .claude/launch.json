@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "test-site-u18",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/OC.Automate.Mastodon.TestSite/OC.Automate.Mastodon.TestSite.csproj",
+        "--urls",
+        "https://localhost:5001"
+      ],
+      "port": 5001
+    },
+    {
+      "name": "test-site-u17",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/OC.Automate.Mastodon.TestSite.U17/OC.Automate.Mastodon.TestSite.U17.csproj",
+        "--urls",
+        "https://localhost:5002"
+      ],
+      "port": 5002
+    }
+  ]
+}

@@ -23,24 +23,18 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
 
     public override async Task<ActionResult> ExecuteAsync(ActionContext context, CancellationToken cancellationToken)
     {
-        var connectionSettings = context.Connection?.GetSettings<MastodonConnectionSettings>();
+        var connectionSettings = context.Connection?.GetSettings<MastodonSettings>();
 
         if (connectionSettings is null
             || string.IsNullOrWhiteSpace(connectionSettings.InstanceUrl)
-            || string.IsNullOrWhiteSpace(connectionSettings.ConnectionName))
+            || string.IsNullOrWhiteSpace(connectionSettings.AccessToken))
         {
             return ActionResult.Failed(
                 new InvalidOperationException("No Mastodon connection configured."),
                 StepRunErrorCategory.ConfigurationError);
         }
 
-        if (!_clientFactory.TryCreateClient(connectionSettings.ConnectionName, out var client, out var tokenError))
-        {
-            return ActionResult.Failed(
-                new InvalidOperationException(tokenError),
-                StepRunErrorCategory.ConfigurationError);
-        }
-
+        var client = _clientFactory.CreateClient(connectionSettings);
         var settings = context.GetSettings<MastodonPostSettings>();
 
         if (string.IsNullOrWhiteSpace(settings.Content))
@@ -67,9 +61,6 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
             Content = JsonContent.Create(payload)
         };
 
-        // Guard against duplicate toots if this step is retried: Mastodon returns the original
-        // status for a repeated Idempotency-Key rather than creating a new one. RunId + StepId is
-        // stable across retries of the same step but unique per step execution.
         request.Headers.Add("Idempotency-Key", $"{context.RunId}:{context.StepId}");
 
         _logger.LogInformation(

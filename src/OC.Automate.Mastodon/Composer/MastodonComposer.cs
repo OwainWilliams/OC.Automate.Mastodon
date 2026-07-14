@@ -14,16 +14,14 @@ public class MastodonComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
-        builder.Services.AddOptions<MastodonSettings>()
-            .BindConfiguration(MastodonSettings.SectionName);
-
+        builder.Services.AddHttpClient();
         builder.Services.AddSingleton<MastodonClientFactory>();
-
-        builder.WithCollectionBuilder<ConnectionTypeCollectionBuilder>()
-            .Add<MastodonConnectionType>();
 
         builder.WithCollectionBuilder<ActionCollectionBuilder>()
             .Add<SendMastodonPostAction>();
+
+        builder.WithCollectionBuilder<ConnectionTypeCollectionBuilder>()
+            .Add<MastodonConnectionType>();
 
         builder.Services.AddSingleton<IPackageManifestReader, MastodonPackageManifestReader>();
     }
