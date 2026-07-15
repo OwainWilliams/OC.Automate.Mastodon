@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using OC.Automate.Mastodon.Composers;
+using OC.Automate.Mastodon.ConnectionTypes;
 using OC.Automate.Mastodon.Factory;
 using OC.Automate.Mastodon.Settings;
 using Umbraco.Automate.Core.Actions;
