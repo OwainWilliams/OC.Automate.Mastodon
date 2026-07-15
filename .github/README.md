@@ -71,6 +71,8 @@ Add the **Send Mastodon Post** action to any automation and select your Mastodon
 | Sensitive | Marks the post as sensitive/NSFW. |
 | Spoiler Text | Content warning shown before the post body. |
 
+> **Note:** Most Mastodon instances limit posts to 500 characters (links count as 23 characters, and spoiler text counts toward the limit). Posts over the instance's limit are rejected by the Mastodon API and the action fails.
+
 ## Migration from 1.x to 2.x
 
 Version 2.x is a **breaking change**. If you're upgrading from 1.x, you must update your configuration:
@@ -94,7 +96,7 @@ Version 2.x is a **breaking change**. If you're upgrading from 1.x, you must upd
 
 | Package version | Umbraco Automate | Umbraco CMS |
 |---|---|---|
-| 2.x | 17.x – 18.x | 17.x – 18.x |
+| 2.x | 17.x – 18.x | 17.4 – 18.x |
 | 1.x | 17.x – 18.x | 17.x – 18.x |
 
 ## Links

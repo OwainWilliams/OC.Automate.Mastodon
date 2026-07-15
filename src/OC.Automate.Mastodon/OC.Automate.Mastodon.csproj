@@ -7,12 +7,12 @@
 
     <!-- NuGet metadata -->
     <PackageId>OC.Automate.Mastodon</PackageId>
-    <Version>2.0.0-alpha014</Version>
+    <Version>2.0.0</Version>
     <Authors>Owain Williams</Authors>
     <Description>Mastodon connection type and action for Umbraco Automate. Lets you post statuses to any Mastodon instance as part of an automation workflow.</Description>
     <PackageTags>umbraco;automate;mastodon;fediverse;umbraco-marketplace</PackageTags>
-    <PackageProjectUrl>https://github.com/OwainWilliams/OC.Automate</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/OwainWilliams/OC.Automate</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/OwainWilliams/OC.Automate.Mastodon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/OwainWilliams/OC.Automate.Mastodon</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README_nuget.md</PackageReadmeFile>

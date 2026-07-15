@@ -2,10 +2,11 @@ using Umbraco.Automate.Core.Settings;
 
 namespace OC.Automate.Mastodon.Settings;
 
-public class MastodonPostSettings
+public sealed class MastodonPostSettings
 {
     [Field(Label = "Content",
-     Description = "The content of the post. Supports data bindings using ${ binding } syntax.", 
+     Description = "The content of the post. Supports data bindings using ${ binding } syntax.",
+     SortOrder = 0,
      SupportsBindings = true,
      EditorUiAlias = "Umb.PropertyEditorUi.TextArea",
      EditorConfig = """[{ "alias": "rows", "value": 4 }]""")]

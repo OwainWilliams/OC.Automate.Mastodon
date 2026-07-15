@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Logging;
 using OC.Automate.Mastodon.Factory;
+using OC.Automate.Mastodon.Settings;
 using System.Net.Http.Json;
 using Umbraco.Automate.Core.Actions;
 
-namespace OC.Automate.Mastodon.Settings;
+namespace OC.Automate.Mastodon.Actions;
 
 [Action("mastodonSendPost", "Send Mastodon Post", ConnectionTypeAlias = "mastodon")]
 public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
@@ -25,16 +26,21 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
     {
         var connectionSettings = context.Connection?.GetSettings<MastodonSettings>();
 
-        if (connectionSettings is null
-            || string.IsNullOrWhiteSpace(connectionSettings.InstanceUrl)
-            || string.IsNullOrWhiteSpace(connectionSettings.AccessToken))
+        if (connectionSettings is null)
         {
             return ActionResult.Failed(
                 new InvalidOperationException("No Mastodon connection configured."),
                 StepRunErrorCategory.ConfigurationError);
         }
 
-        var client = _clientFactory.CreateClient(connectionSettings);
+        var connectionError = MastodonSettingsValidator.Validate(connectionSettings);
+        if (connectionError is not null)
+        {
+            return ActionResult.Failed(
+                new InvalidOperationException(connectionError),
+                StepRunErrorCategory.ConfigurationError);
+        }
+
         var settings = context.GetSettings<MastodonPostSettings>();
 
         if (string.IsNullOrWhiteSpace(settings.Content))
@@ -42,17 +48,7 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
                 new InvalidOperationException("Post content is required."),
                 StepRunErrorCategory.Validation);
 
-        var status = settings.Content.Trim();
-        if (!string.IsNullOrWhiteSpace(settings.PostUrl))
-            status = $"{status}\n\n{settings.PostUrl}";
-
-        var payload = new
-        {
-            status,
-            visibility = string.IsNullOrWhiteSpace(settings.Visibility) ? "public" : settings.Visibility,
-            sensitive = settings.IsSensitive,
-            spoiler_text = settings.SpoilerText
-        };
+        var payload = MastodonStatusRequest.FromSettings(settings);
 
         using var request = new HttpRequestMessage(
             HttpMethod.Post,
@@ -65,18 +61,35 @@ public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
 
         _logger.LogInformation(
             "Posting to Mastodon instance {InstanceUrl}: {StatusLength} characters",
-            connectionSettings.InstanceUrl, status.Length);
+            connectionSettings.InstanceUrl, payload.Status.Length);
 
-        var response = await client.SendAsync(request, cancellationToken);
+        using var client = _clientFactory.CreateClient(connectionSettings);
 
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            var error = await response.Content.ReadAsStringAsync(cancellationToken);
+            using var response = await client.SendAsync(request, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync(cancellationToken);
+                return ActionResult.Failed(
+                    new InvalidOperationException($"Mastodon API returned {response.StatusCode}: {error}"),
+                    StepRunErrorCategory.InvalidResponse);
+            }
+
+            return Success();
+        }
+        catch (HttpRequestException ex)
+        {
             return ActionResult.Failed(
-                new InvalidOperationException($"Mastodon API returned {response.StatusCode}: {error}"),
+                new InvalidOperationException($"Could not reach {connectionSettings.InstanceUrl}: {ex.Message}", ex),
                 StepRunErrorCategory.InvalidResponse);
         }
-
-        return Success();
+        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return ActionResult.Failed(
+                new InvalidOperationException($"The request to {connectionSettings.InstanceUrl} timed out."),
+                StepRunErrorCategory.InvalidResponse);
+        }
     }
 }

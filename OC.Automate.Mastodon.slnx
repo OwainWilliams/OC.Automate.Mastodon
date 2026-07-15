@@ -9,4 +9,5 @@
     <Project Path="TestSites/Umbraco17/Umbraco17/Umbraco17.csproj" />
   </Folder>
   <Project Path="src/OC.Automate.Mastodon/OC.Automate.Mastodon.csproj" />
+  <Project Path="tests/OC.Automate.Mastodon.Tests/OC.Automate.Mastodon.Tests.csproj" />
 </Solution>

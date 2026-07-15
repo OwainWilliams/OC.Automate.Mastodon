@@ -1,15 +1,14 @@
 using Microsoft.Extensions.DependencyInjection;
-using OC.Automate.Mastodon.Composers;
+using OC.Automate.Mastodon.Actions;
 using OC.Automate.Mastodon.ConnectionTypes;
 using OC.Automate.Mastodon.Factory;
-using OC.Automate.Mastodon.Settings;
 using Umbraco.Automate.Core.Actions;
 using Umbraco.Automate.Core.Connections;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Infrastructure.Manifest;
 
-namespace OC.Automate.Mastodon.Composer;
+namespace OC.Automate.Mastodon.Composers;
 
 public class MastodonComposer : IComposer
 {
