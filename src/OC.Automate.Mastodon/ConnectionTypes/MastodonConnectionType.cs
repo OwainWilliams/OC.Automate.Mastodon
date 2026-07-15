@@ -9,7 +9,7 @@ namespace OC.Automate.Mastodon.ConnectionTypes;
 [ConnectionType("mastodon", "Mastodon",
     Description = "Connect to Mastodon",
     Group = "Custom",
-    Icon = "icon-plug")]
+    Icon = "icon-flash")]
 public sealed class MastodonConnectionType : ConnectionTypeBase<MastodonSettings>
 {
     private readonly MastodonClientFactory _clientFactory;
