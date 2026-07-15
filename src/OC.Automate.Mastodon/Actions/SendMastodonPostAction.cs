@@ -6,7 +6,11 @@ using Umbraco.Automate.Core.Actions;
 
 namespace OC.Automate.Mastodon.Actions;
 
-[Action("mastodonSendPost", "Send Mastodon Post", ConnectionTypeAlias = "mastodon")]
+[Action("mastodonSendPost", "Send Mastodon Post",
+    ConnectionTypeAlias = "mastodon",
+    Description = "Sends a Mastodon Post",
+    Icon = "icon-flash",
+    Group = "Social Networks")]
 public class SendMastodonPostAction : ActionBase<MastodonPostSettings>
 {
     private readonly MastodonClientFactory _clientFactory;

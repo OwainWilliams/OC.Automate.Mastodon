@@ -7,8 +7,8 @@ using Umbraco.Automate.Core.Connections;
 namespace OC.Automate.Mastodon.ConnectionTypes;
 
 [ConnectionType("mastodon", "Mastodon",
-    Description = "Connect to Mastodon",
-    Group = "Custom",
+    Description = "Send post to Mastodon",
+    Group = "Social Networks",
     Icon = "icon-flash")]
 public sealed class MastodonConnectionType : ConnectionTypeBase<MastodonSettings>
 {
